@@ -1,0 +1,122 @@
+/* Styles.css */
+
+.hero {
+  position: relative;
+  height: 100vh;
+  background: url("./img/main.jpeg") center/cover no-repeat;
+  backdrop-filter: blur(5px);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-banner {
+  text-align: center;
+}
+
+.bookley-heading {
+  font-size: 5em;
+  opacity: 0;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-banner p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.homebtn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: yellow;
+  margin: 5px;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Added color transition */
+}
+
+.homebtn:hover {
+  background-color: transparent;
+  border: 2px solid yellow;
+  color: #fff; /* Adjusted text color on hover */
+}
+
+/* About Us */
+
+.section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* You can adjust the height as needed */
+  background-size: cover;
+  background-position: center;
+  background-image: url("./img/about.jpg"); /* Make sure to adjust the path to your image */
+  color: #fff; /* Adjust the text color based on your image */
+  display: flex;
+  align-items: center;
+}
+
+.section-center {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  animation: fadeIn 1s ease-out; /* Apply fade-in animation */
+}
+
+.about-info {
+  background: rgba(
+    0,
+    0,
+    0,
+    0.7
+  ); /* Add a semi-transparent black background for better readability */
+  padding: 2rem;
+  border-radius: 10px;
+  animation: fadeIn 1s ease-out; /* Apply fade-in animation */
+}
+
+.about-info h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-info p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.readMoreBtn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: yellow;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Apply button transition */
+}
+
+.readMoreBtn:hover {
+  background-color: transparent;
+  border: 2px solid yellow;
+  color: #fff;
+}
