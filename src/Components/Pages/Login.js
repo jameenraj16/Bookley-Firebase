@@ -11,7 +11,7 @@ import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../config/config";
 import { GoogleButton } from "react-google-button";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { authActions } from "../../Store";
 import { useDispatch } from "react-redux";
 
@@ -121,8 +121,12 @@ const Signup = () => {
                   Login
                 </Button>
                 <div className="text-center">
+                  <div style={{border:"1px solid #ccc", margin:"5px", borderRadius:"10px"}}>
+                  <Typography><b><u>Demo Password</u></b></Typography>
+                  <p><span><b>Email:</b></span>demo16@gmail.com</p>
+                  <p><span><b>Pass:</b></span>demo123</p>
+                  </div>
                   <p>or sign In with:</p>
-
                   <GoogleButton
                     onClick={(e) => googleSignin()}
                     label="Sign In with Google"

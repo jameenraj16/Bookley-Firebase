@@ -56,9 +56,10 @@ const Header = () => {
                 color: "#ff6700",
               }}
             >
-              <span style={{fontWeight:"bolder"}}>Bookley</span>
+              <span style={{ fontWeight: "bolder" }}>Bookley</span>
             </Link>{" "}
           </Typography>
+
           {isLoggedIn && (
             <Tabs
               sx={{ ml: "auto" }}
@@ -142,7 +143,7 @@ const Header = () => {
                   <>
                     <ListItem>
                       <Button
-                        sx={{ width: 100, fontWeight: 600,borderRadius:4 }}
+                        sx={{ width: 100, fontWeight: 600, borderRadius: 4 }}
                         variant="contained"
                         onClick={() => navigate("/signup")}
                       >
@@ -151,7 +152,7 @@ const Header = () => {
                     </ListItem>
                     <ListItem>
                       <Button
-                        sx={{ width: 100, fontWeight: 600,borderRadius:4 }}
+                        sx={{ width: 100, fontWeight: 600, borderRadius: 4 }}
                         variant="contained"
                         onClick={() => navigate("/login")}
                       >

@@ -18,6 +18,9 @@ const UserDetails = () => {
   const [inputs, setInputs] = useState({
     userName: "",
     email: "",
+    age: "",
+    state: "",
+    city: "",
   });
   //handleChange
   const handleChange = (e) => {
@@ -38,6 +41,10 @@ const UserDetails = () => {
 
         await updateDoc(doc(db, "users", userDoc.id), {
           name: inputs.userName,
+          email: inputs.email,
+          age: inputs.age,
+          state: inputs.state,
+          city: inputs.city,
         });
 
         setUser((prevUser) => ({
@@ -55,7 +62,7 @@ const UserDetails = () => {
   //handleSubmit
   const handleSubmit = (e) => {
     e.preventDefault();
-    submitRequest().then(() => navigate("/books"))
+    submitRequest().then(() => navigate("/books"));
   };
   //Fetch User Details
   const fetchUserDetails = async () => {
@@ -74,6 +81,9 @@ const UserDetails = () => {
         setUser({
           name: data[0].name,
           email: data[0].email,
+          age: data[0].age,
+          state: data[0].state,
+          city: data[0].city,
         });
       }
     });
@@ -83,77 +93,148 @@ const UserDetails = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <h2 style={{ margin: 5 }}>Hello {user.name} !</h2>
-        <Box
-          maxWidth="450px"
-          display="flex"
-          flexDirection={"column"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          boxShadow={"10px 10px 20px #ccc"}
-          padding={10}
-          margin="auto"
-          marginTop={8}
-          borderRadius={3}
-        >
-          <Typography
-            style={{ fontWeight: "bold", color: "#34312D", fontSize: "35px" }}
+        <div style={{ display: "flex" }}>
+          <Box
+            maxWidth="550px"
+            display="flex"
+            flexDirection={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            boxShadow={"10px 10px 20px #ccc"}
+            padding={10}
+            margin="auto"
+            marginTop={8}
+            borderRadius={3}
           >
-            Update Your Details!
-          </Typography>
+            <Typography
+              style={{ fontWeight: "bold", color: "#34312D", fontSize: "35px" }}
+            >
+              Update Your Details!
+            </Typography>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                onChange={handleChange}
-                value={inputs.userName}
-                name="userName"
-                margin="normal"
-                label="Username"
-              />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  fullWidth
+                  onChange={handleChange}
+                  value={inputs.userName}
+                  name="userName"
+                  margin="normal"
+                  label="Username"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  onChange={handleChange}
+                  value={inputs.email}
+                  name="email"
+                  margin="normal"
+                  label="Email"
+                  type="email"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  onChange={handleChange}
+                  value={inputs.age}
+                  name="age"
+                  margin="normal"
+                  label="Age"
+                  type="number"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  onChange={handleChange}
+                  value={inputs.state}
+                  name="state"
+                  margin="normal"
+                  label="State"
+                  type="label"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  onChange={handleChange}
+                  value={inputs.city}
+                  name="city"
+                  margin="normal"
+                  label="City"
+                  type="label"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                onChange={handleChange}
-                value={inputs.email}
-                name="email"
-                margin="normal"
-                label="Email"
-                type="email"
-              />
+            <Button
+              type="submit"
+              sx={{
+                textTransform: "none",
+                fontWeight: "bold",
+                color: "white",
+                margin: 1,
+                borderRadius: 3,
+                backgroundColor: "#335CD7",
+                ":hover": { backgroundColor: "#white", color: "#335CD7" },
+              }}
+              style={{ width: "110px" }}
+            >
+              Update
+            </Button>
+            <Button
+              onClick={() => navigate("/myBlogs")}
+              sx={{
+                fontWeight: "bold",
+                color: "#EF626C",
+                textTransform: "none",
+                borderRadius: 3,
+                width: "110px",
+                backgroundColor: "#white",
+                ":hover": { backgroundColor: "#EF626C", color: "white" },
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+          <Box
+            maxWidth="450px"
+            display="flex"
+            flexDirection={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            boxShadow={"10px 10px 20px #ccc"}
+            padding={10}
+            margin="auto"
+            marginTop={8}
+            borderRadius={3}
+          >
+            <Typography
+              style={{ fontWeight: "bold", color: "#34312D", fontSize: "35px" }}
+            >
+              Your Profile
+            </Typography>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Typography>Name: {user.name}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>Email: {user.email}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography>Age: {user.age}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>State: {user.state}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>City: {user.city}</Typography>
+              </Grid>
             </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            sx={{
-              textTransform: "none",
-              fontWeight: "bold",
-              color: "white",
-              margin: 1,
-              borderRadius: 3,
-              backgroundColor: "#335CD7",
-              ":hover": { backgroundColor: "#white", color: "#335CD7" },
-            }}
-            style={{ width: "110px" }}
-          >
-            Update
-          </Button>
-          <Button
-            onClick={() => navigate("/myBlogs")}
-            sx={{
-              fontWeight: "bold",
-              color: "#EF626C",
-              textTransform: "none",
-              borderRadius: 3,
-              width: "110px",
-              backgroundColor: "#white",
-              ":hover": { backgroundColor: "#EF626C", color: "white" },
-            }}
-          >
-            Cancel
-          </Button>
-        </Box>
+          </Box>
+        </div>
       </form>
     </div>
   );
