@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, FormLabel, Grid, TextField, Typography } from "@mui/material";
 import {
   updateDoc,
   doc,
@@ -8,25 +8,18 @@ import {
   getDocs,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Form, useNavigate, useParams } from "react-router-dom";
 import { db } from "../../config/config";
 
 const UserDetails = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [user, setUser] = useState({ name: "", email: "" });
-  const [inputs, setInputs] = useState({
-    userName: "",
-    email: "",
-    age: "",
-    state: "",
-    city: "",
-  });
+  const [inputs, setInputs] = useState({});
   //handleChange
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.name === "image" ? e.target.files[0] : e.target.value,
     }));
   };
   //submitRequest
@@ -38,20 +31,34 @@ const UserDetails = () => {
       );
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
-
-        await updateDoc(doc(db, "users", userDoc.id), {
-          name: inputs.userName,
-          email: inputs.email,
-          age: inputs.age,
-          state: inputs.state,
-          city: inputs.city,
-        });
-
-        setUser((prevUser) => ({
-          ...prevUser,
-          name: inputs.userName,
-        }));
-        alert("User details updated successfully!");
+        if (inputs.image instanceof File) {
+          const reader = new FileReader();
+          reader.onload = async () => {
+            const imageDataUrl = reader.result
+            await updateDoc(doc(db, "users", userDoc.id), {
+              name: inputs.name,
+              email: inputs.email,
+              age: inputs.age,
+              state: inputs.state,
+              city: inputs.city,
+              image: imageDataUrl
+            });
+            setInputs((prevUser) => ({
+              ...prevUser,
+              name: inputs.name,
+            }));
+            alert("User details updated successfully!");
+          }
+          reader.readAsDataURL(inputs.image)
+        } else {
+          await updateDoc(doc(db, "users", userDoc.id), {
+            name: inputs.name,
+            email: inputs.email,
+            age: inputs.age,
+            state: inputs.state,
+            city: inputs.city,
+          });
+        }
       } else {
         console.log("User not found");
       }
@@ -78,12 +85,13 @@ const UserDetails = () => {
   useEffect(() => {
     fetchUserDetails().then((data) => {
       if (data && data.length > 0) {
-        setUser({
+        setInputs({
           name: data[0].name,
           email: data[0].email,
           age: data[0].age,
           state: data[0].state,
           city: data[0].city,
+          image: data[0].image
         });
       }
     });
@@ -92,7 +100,7 @@ const UserDetails = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2 style={{ margin: 5 }}>Hello {user.name} !</h2>
+        <h2 style={{ margin: 5 }}>Hello {inputs.name} !</h2>
         <div style={{ display: "flex" }}>
           <Box
             maxWidth="550px"
@@ -111,80 +119,117 @@ const UserDetails = () => {
             >
               Update Your Details!
             </Typography>
-
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
+                <FormLabel>Username</FormLabel>
                 <TextField
+                sx={{mt:0}}
                   fullWidth
                   onChange={handleChange}
-                  value={inputs.userName}
-                  name="userName"
+                  value={inputs.name}
+                  name="name"
                   margin="normal"
-                  label="Username"
+                  type="text"
                 />
               </Grid>
               <Grid item xs={6}>
+              <FormLabel>E-mail</FormLabel>
                 <TextField
+                sx={{mt:0}}
                   fullWidth
                   onChange={handleChange}
                   value={inputs.email}
                   name="email"
                   margin="normal"
-                  label="Email"
                   type="email"
                 />
               </Grid>
               <Grid item xs={6}>
+              <FormLabel>Age</FormLabel>
                 <TextField
+                sx={{mt:0}}
                   fullWidth
                   onChange={handleChange}
                   value={inputs.age}
                   name="age"
                   margin="normal"
-                  label="Age"
                   type="number"
                 />
               </Grid>
               <Grid item xs={6}>
+              <FormLabel>State</FormLabel>
                 <TextField
+                sx={{mt:0}}
                   fullWidth
                   onChange={handleChange}
                   value={inputs.state}
                   name="state"
                   margin="normal"
-                  label="State"
-                  type="label"
+                  type="text"
                 />
               </Grid>
               <Grid item xs={6}>
+              <FormLabel>City</FormLabel>
                 <TextField
+                sx={{mt:0}}
                   fullWidth
                   onChange={handleChange}
                   value={inputs.city}
                   name="city"
                   margin="normal"
-                  label="City"
-                  type="label"
+                  type="text"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormLabel>Profile Picture (<span style={{ color: "blue" }}>Max Size: 1MB</span>)</FormLabel>
+                <TextField
+                sx={{mt:0}}
+                  onChange={handleChange}
+                  type="file"
+                  accept="image/*"
+                  margin="normal"
+                  fullWidth
+                  variant="outlined"
+                  name="image"
+                  helperText={
+                    inputs.image && inputs.image.size > 1024 * 1024 ? (
+                      <b style={{ color: "red" }}>File size exceeds 1MB limit</b>
+                    ) : (
+                      ""
+                    )
+                  }
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              sx={{
-                textTransform: "none",
-                fontWeight: "bold",
-                color: "white",
-                margin: 1,
-                borderRadius: 3,
-                backgroundColor: "#335CD7",
-                ":hover": { backgroundColor: "#white", color: "#335CD7" },
+            <img
+              src={inputs.image}
+              type="file"
+              style={{
+                maxWidth: "150px",
+                border: "2px solid #ccc",
+                padding: "2px",
+                margin: "auto",
+                marginBottom: "5px",
+                borderRadius: "10px",
               }}
-              style={{ width: "110px" }}
-            >
-              Update
-            </Button>
+              alt={inputs.name}
+            />
+            {inputs.image && inputs.image.size > 1024 * 1024 ? (
+              <Button
+                disabled
+                sx={{ margin: "5px" }}
+                type="submit"
+                variant="contained"
+              >
+                Update
+              </Button>
+            ) : (
+              <Button sx={{ margin: "5px" }} type="submit" variant="contained">
+                Update
+              </Button>
+            )}
             <Button
-              onClick={() => navigate("/myBlogs")}
+              onClick={() => navigate("/")}
               sx={{
                 fontWeight: "bold",
                 color: "#EF626C",
@@ -197,42 +242,6 @@ const UserDetails = () => {
             >
               Cancel
             </Button>
-          </Box>
-          <Box
-            maxWidth="450px"
-            display="flex"
-            flexDirection={"column"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            boxShadow={"10px 10px 20px #ccc"}
-            padding={10}
-            margin="auto"
-            marginTop={8}
-            borderRadius={3}
-          >
-            <Typography
-              style={{ fontWeight: "bold", color: "#34312D", fontSize: "35px" }}
-            >
-              Your Profile
-            </Typography>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <Typography>Name: {user.name}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>Email: {user.email}</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography>Age: {user.age}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>State: {user.state}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>City: {user.city}</Typography>
-              </Grid>
-            </Grid>
           </Box>
         </div>
       </form>

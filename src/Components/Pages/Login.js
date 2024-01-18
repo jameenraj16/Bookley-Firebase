@@ -51,7 +51,7 @@ const Signup = () => {
     handleSignin().then(() => {
       dispatch(authActions.login());
       if (localStorage.getItem("userId")) {
-        navigate("/books");
+        navigate("/");
       }
     });
   };

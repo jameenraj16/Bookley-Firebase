@@ -76,7 +76,6 @@ const UpdateBook = () => {
   const sendRequest = async () => {
     try {
       const docRef = doc(db, "books", id);
-      console.log(name);
       if (inputs.image instanceof File) {
         const reader = new FileReader();
         reader.onload = async () => {
